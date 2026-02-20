@@ -7,12 +7,16 @@ connectivity_plotter <- function(mask, corr_frame, anat_data, seed, plane){
                                 Z = seq_len(ncol(seed_slice))) %>%
       mutate(intensity = as.vector(seed_slice))
 
+    #anat_data %>%
+    #reshape2::melt()
+
     mask_new <- as.data.frame(mask) %>% mutate(which_voxel = V4) %>% select(-V4)
     corr_intensity_frame <- inner_join(mask_new, corr_frame) %>% rename(X = dim1,
                                                                         Y = dim2,
                                                                         Z = dim3,
                                                                         correlation = value,
-                                                                        )
+                                                                        ) %>%
+      mutate(abs_corr = ifelse(is.na(correlation),0, abs(correlation)))
 
     slice_corr_intensity <- corr_intensity_frame %>% filter(X == seed$x) %>%
       #mutate(correlation = ifelse(abs(correlation) < 0.5, NA_real_, correlation)) %>%
@@ -23,9 +27,9 @@ connectivity_plotter <- function(mask, corr_frame, anat_data, seed, plane){
       geom_tile(data = slice_corr_intensity, aes(x = Y, y = Z, fill = intensity)) +
       scale_fill_gradient(low = "black", high = "white") + guides(fill = "none") +
       new_scale_fill() +
-      geom_tile(data=slice_corr_intensity, aes(x=Y, y=Z, fill = correlation),
-                alpha = 0.6) +
-      scale_fill_viridis_c(option = "magma") +
+      geom_tile(data=slice_corr_intensity, aes(x=Y, y=Z, fill = correlation,
+                                               alpha = abs_corr)) +
+      scale_fill_viridis_c(option = "plasma") + guides(alpha = "none") +
       annotate("point", x = seed$y, y = seed$z,
                color = "red", size = 3) +
       coord_equal() + labs(title = paste0("Whole-brain seed connectivity",
@@ -43,7 +47,9 @@ connectivity_plotter <- function(mask, corr_frame, anat_data, seed, plane){
     corr_intensity_frame <- inner_join(mask_new, corr_frame) %>% rename(X = dim1,
                                                                         Y = dim2,
                                                                         Z = dim3,
-                                                                        correlation = value)
+                                                                        correlation = value) %>%
+      mutate(abs_corr = ifelse(is.na(correlation),0, abs(correlation)))
+    
     slice_corr_intensity <- corr_intensity_frame %>% filter(Y == seed$y) %>%
       inner_join(.,slice_longer, by=join_by(X,Z))
 
@@ -52,9 +58,9 @@ connectivity_plotter <- function(mask, corr_frame, anat_data, seed, plane){
       geom_tile(data = slice_corr_intensity, aes(x = X, y = Z, fill = intensity)) +
       scale_fill_gradient(low = "black", high = "white") + guides(fill = "none") +
       new_scale_fill() +
-      geom_tile(data=slice_corr_intensity, aes(x=X, y=Z, fill = correlation),
-                alpha = 0.6) +
-      scale_fill_viridis_c(option = "magma") +
+      geom_tile(data=slice_corr_intensity, aes(x=X, y=Z, fill = correlation,
+                alpha = abs_corr)) +
+      scale_fill_viridis_c(option = "plasma") + guides(alpha = "none") +
       annotate("point", x = seed$x, y = seed$z,
                color = "red", size = 3) +
       coord_equal() + labs(title = paste0("Whole-brain seed connectivity",
@@ -72,7 +78,9 @@ connectivity_plotter <- function(mask, corr_frame, anat_data, seed, plane){
     corr_intensity_frame <- inner_join(mask_new, corr_frame) %>% rename(X = dim1,
                                                                         Y = dim2,
                                                                         Z = dim3,
-                                                                        correlation = value)
+                                                                        correlation = value) %>%
+      mutate(abs_corr = ifelse(is.na(correlation),0, abs(correlation)))
+    
     slice_corr_intensity <- corr_intensity_frame %>% filter(Z == seed$z) %>%
       inner_join(.,slice_longer, by=join_by(X,Y))
 
@@ -81,9 +89,9 @@ connectivity_plotter <- function(mask, corr_frame, anat_data, seed, plane){
       geom_tile(data = slice_corr_intensity, aes(x = X, y = Y, fill = intensity)) +
       scale_fill_gradient(low = "black", high = "white") + guides(fill = "none") +
       new_scale_fill() +
-      geom_tile(data=slice_corr_intensity, aes(x=X, y=Y, fill = correlation),
-                alpha = 0.6) +
-      scale_fill_viridis_c(option = "magma") +
+      geom_tile(data=slice_corr_intensity, aes(x=X, y=Y, fill = correlation,
+                alpha = abs_corr)) +
+      scale_fill_viridis_c(option = "plasma") + guides(alpha = "none") +
       annotate("point", x = seed$x, y = seed$y,
                color = "red", size = 3) +
       coord_equal() + labs(title = paste0("Whole-brain seed connectivity",
@@ -91,7 +99,7 @@ connectivity_plotter <- function(mask, corr_frame, anat_data, seed, plane){
   }
   return(plot)
 }
-slice_plotter <- function(img, plane, slice_ind){
+  slice_plotter <- function(img, plane, slice_ind){
   dim_img <- dim(img)
   if(plane == "S"){
     if (slice_ind > dim_img[1]){

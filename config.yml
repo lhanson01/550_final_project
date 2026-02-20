@@ -1,0 +1,10 @@
+seed:
+  unit: voxel
+  seed_x: 50
+  seed_y: 38
+  seed_z: 65
+
+ROI:
+  unit: ROI
+  which_ROI: 250
+  correlation: pearson

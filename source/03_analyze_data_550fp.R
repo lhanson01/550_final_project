@@ -9,9 +9,9 @@ brain_mask <- cbind(which(anatomical_data > 0, arr.ind = TRUE),
 
 #set.seed(1000)
 #brain_mask_row <- sample(1:nrow(brain_mask),1) # >= 100000 for now
-select_seed_voxel <- list(x = 50,
-                          y = 38,
-                          z = 65)
+select_seed_voxel <- list(x = 50, # <--- Parameterize
+                          y = 38, # <---
+                          z = 65) # <---
 seed_time_series <- functional_image_data[select_seed_voxel$x,
                                           select_seed_voxel$y,
                                           select_seed_voxel$z,]

@@ -1,5 +1,5 @@
 ---
-title: "BIOS 731 Homework 1: A simple seed-based analysis of functional connectivity in a single subject"
+title: "DATA 550 Final Project 2: A simple seed-based analysis of functional connectivity in a single subject"
 author: "Liam Hanson"
 format: html
 editor: visual
@@ -18,6 +18,7 @@ library(ggplot2)
 library(ggnewscale)
 library(RNifti)
 library(tidyverse)
+library(gtsummary)
 ```
 
 ## Overview
@@ -43,7 +44,8 @@ Pearson's correlation coefficient was then calculated pairwise between the BOLD 
 This script loads the anatomical image and the functional images into the R environment using R package RNifti.
 
 ```{r}
-source(here("source", "HW_1_data_download.R"))
+#| echo: false
+source(here("source", "00_download_data_550fp.R"))
 ```
 
 ## Data Analysis
@@ -51,14 +53,16 @@ source(here("source", "HW_1_data_download.R"))
 This code also contains necessary data processing as well as analysis including the creation of the brain mask, the selection of the seed voxel, the calculation of correlations across voxels and the sorting of voxels for visualization.
 
 ```{r}
-source(here("source", "HW_1_data_analysis.R"))
+#| echo: false
+source(here("source", "03_analyze_data_550fp.R"))
 ```
 
 ## Visualization
 
 ```{r}
+#| echo: false
 source(here("source", "visualization_functions.R"))
-source(here("source", "HW_1_data_visualization.R"))
+source(here("source", "04_visualize_data_550fp.R"))
 ```
 
 ::: {#fig-brains layout="[[1,1], [1]]"}
@@ -89,16 +93,27 @@ bold_lineplot
 BOLD time series for the 30 most correlated voxels with the seed voxel. Opacity of the line indicates degree of correlation.
 :::
 
+:::{#table-correlations}
+```{r, call-table}
+#| echo: false
+source(here("source", "05_make_table.R"))
+voxel_table
+```
+
+Total amount, mean, and standard deviation of voxels with negative or positive correlation to the seed voxel. More positive correlations were recorded than negative, though the correlation magnitudes and standard deviation were similar. 
+
+:::
+
 ## Results
 
 Figure 1 shows highest correlation with neighboring voxels which is consistent with previous work on structural and functional connectivity (@KOCH2002241). Areas which are highly structurally connected like immediate neighboring voxels are likely to show high levels of functional connectivity (@VANDENHEUVEL2010519).
 
 The sagittal slice shown in Figure 1 shows generally low connectivity with the medial prefrontal cortex, another key hub of the default mode network (@ZHOU2025101613). This is consistent with other literature showing DMN modulation as a key effect of psychedelics use on brain connectivity. (@psychedelic)
 
-Figure 2 shows similar BOLD intensities across the most-correlated voxels. Nearly all voxels displayed on this plot were neighbored the seed voxel.
+Figure 2 shows similar BOLD intensities across the most-correlated voxels. Nearly all voxels displayed on this plot neighbored the seed voxel.
 
-<div style="page-break-before: always;"></div>
-
+::: {style="page-break-before: always;"}
+:::
 
 ## References
 
