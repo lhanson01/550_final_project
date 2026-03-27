@@ -1,7 +1,7 @@
 # ignore original data download
-.Rproj.user
+.Rproj.user/
 .RHistory
-.gitignore
+*.Rproj
 
 ignore/**
 
