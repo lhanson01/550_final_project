@@ -1,0 +1,102 @@
+---
+title: "DATA 550 Final Project: A simple seed-based analysis of functional connectivity in a single subject"
+author: "Liam Hanson"
+format: html
+editor: visual
+fig_caption: true
+knitr: 
+  opts_chunk:
+    message: false
+    warning: false
+bibliography: references.bib
+---
+
+```{r}
+#| include: false
+library(here)
+library(ggplot2)
+library(ggnewscale)
+library(RNifti)
+library(tidyverse)
+library(gtsummary)
+
+here::i_am("final_report.qmd")
+```
+
+## Overview
+
+This analysis aims to investigate the functional connectivity of the brain during an LSD experience of a single subject at rest. Specifically, we perform a seed based connectivity analysis with the seed in the precuneus, a key hub of the default mode network (@Utevsky932). The default mode network is a brain network particularly active during the resting state (@raichle2001default).
+
+## Data Description
+
+The data contain the Blood-Oxygen-Level-Dependent (BOLD) time series at each brain voxel for the subject during the scan as well as the T1 weighted anatomical image.
+
+The pre-processed fMRI data were accessed and downloaded from OpenNeuro.org (@ds003059:1.0.0 et al.). To make the size of the data smaller, brain volumes 50 through 100 were extracted from the original data. The data download from the GitHub repository contains this shrunken data.
+
+R package RNifti (@RNifti) was used to read in image files. A brain mask i.e. the voxels which contain brain tissue was specified by selecting only voxels which had anatomical T1-weighted intensity greater than 0.
+
+## Analysis
+
+We performed a seed-based connectivity analysis (@seedbased). The seed voxel was selected roughly in the precuneus region of the cortex.
+
+Pearson's correlation coefficient was then calculated pairwise between the BOLD time series of the seed voxel and all other voxels in the brain mask.
+
+## Data Analysis
+
+This code contains data download, necessary data processing as well as analysis including the creation of the brain mask, the selection of the seed voxel, the calculation of correlations across voxels and the sorting of voxels for visualization.
+
+## Visualization
+
+::: {#fig-brains layout="[[1,1], [1]]"}
+```{r}
+#| echo: false
+knitr::include_graphics(here::here("output/sag_con_plot.png"))
+```
+
+```{r}
+#| echo: false
+knitr::include_graphics(here::here("output/cor_con_plot.png"))
+```
+
+```{r}
+#| echo: false
+knitr::include_graphics(here::here("output/ax_con_plot.png"))
+```
+
+Degree of correlation between the seed voxel and the sagittal, coronal, and axial brain slices which contain the seed voxel. The seed voxel is indicated by the red circle.
+:::
+
+::: {#fig-time-series}
+```{r}
+#| echo: false
+knitr::include_graphics(here::here("output/BOLD_lineplot.png"))
+```
+
+BOLD time series for the 30 most correlated voxels with the seed voxel. Opacity of the line indicates degree of correlation.
+:::
+
+::: {#table-correlations}
+```{r, call-table}
+#| echo: false
+voxel_table <- readRDS("output/voxel_table.rds")
+voxel_table
+```
+
+Total amount, mean, and standard deviation of voxels with negative or positive correlation to the seed voxel. More positive correlations were recorded than negative, though the correlation magnitudes and standard deviation were similar.
+:::
+
+## Results
+
+Figure 1 shows highest correlation with neighboring voxels which is consistent with previous work on structural and functional connectivity (@KOCH2002241). Areas which are highly structurally connected like immediate neighboring voxels are likely to show high levels of functional connectivity (@VANDENHEUVEL2010519).
+
+The sagittal slice shown in Figure 1 shows generally low connectivity with the medial prefrontal cortex, another key hub of the default mode network (@ZHOU2025101613). This is consistent with other literature showing DMN modulation as a key effect of psychedelics use on brain connectivity. (@psychedelic)
+
+Figure 2 shows similar BOLD intensities across the most-correlated voxels. Nearly all voxels displayed on this plot neighbored the seed voxel.
+
+::: {style="page-break-before: always;"}
+:::
+
+## References
+
+::: {#refs}
+:::
