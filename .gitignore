@@ -1,7 +1,5 @@
-# ignore original data download
 .Rproj.user/
-.RHistory
-*.Rproj
+.Rhistory
 
 ignore/**
 
