@@ -1,13 +1,27 @@
-R_LIBS_USER := C:/Users/whhanso/AppData/Local/R/win-library/4.5
+# R_LIBS_USER := C:/Users/whhanso/AppData/Local/R/win-library/4.5
 
-export R_LIBS_USER
+# export R_LIBS_USER
 
+############ DOCKERHUB CODE ################
+# files that if changed, we would want to rebuild image 
+#PROJECTFILES = report.Rmd source/* Makefile
+#RENVFILES = renv.lock renv/active.R renv/settings.dcf
+
+# rule to build image
+# $@ evaluates to the target name in make 
+# $(<variable>) references a variable in make
+
+
+final_report/final_report.html:  
+	docker run -v "/$$(pwd)/final_report":/home/rstudio/final_project/final_report \
+	lhanson010/lh_final_project
+
+
+########### REPORT GENERATION ##############
 X ?= 59
 Y ?= 78
 Z ?= 59
 
-final_report.html: install source/04_render_report.R final_report.qmd all_output
-	Rscript source/04_render_report.R
 
 ANALYSIS_OBJECTS =  output/corr_frame.rds output/voxel_ranks
 
