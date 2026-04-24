@@ -43,7 +43,7 @@ all_output: $(ANALYSIS_OBJECTS) $(FIGURES) output/voxel_table.rds
 
 .PHONY: clean
 clean: 
-	rm -f output/* final_report.html
+	rm -f output/* final_report/final_report.html
 	
 .PHONY: install
 install:
