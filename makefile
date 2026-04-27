@@ -2,10 +2,7 @@
 
 # export R_LIBS_USER
 
-############ DOCKERHUB CODE ################
-# files that if changed, we would want to rebuild image 
-#PROJECTFILES = report.Rmd source/* Makefile
-#RENVFILES = renv.lock renv/active.R renv/settings.dcf
+
 
 # rule to build image
 # $@ evaluates to the target name in make 
@@ -14,6 +11,10 @@
 X ?= 59
 Y ?= 78
 Z ?= 59
+############ DOCKERHUB CODE ################
+# files that if changed, we would want to rebuild image 
+#PROJECTFILES = report.Rmd source/* Makefile
+#RENVFILES = renv.lock renv/active.R renv/settings.dcf
 
 final_report/final_report.html:  
 	docker run -v "/$$(pwd)/final_report":/home/rstudio/final_project/final_report \
