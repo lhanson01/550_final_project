@@ -10,17 +10,15 @@
 # rule to build image
 # $@ evaluates to the target name in make 
 # $(<variable>) references a variable in make
-
+########### REPORT GENERATION ##############
+X ?= 59
+Y ?= 78
+Z ?= 59
 
 final_report/final_report.html:  
 	docker run -v "/$$(pwd)/final_report":/home/rstudio/final_project/final_report \
 	lhanson010/lh_final_project
 
-
-########### REPORT GENERATION ##############
-X ?= 59
-Y ?= 78
-Z ?= 59
 
 
 ANALYSIS_OBJECTS =  output/corr_frame.rds output/voxel_ranks
