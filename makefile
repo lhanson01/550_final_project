@@ -17,8 +17,9 @@ Z ?= 65
 #RENVFILES = renv.lock renv/active.R renv/settings.dcf	
 
 final_report/final_report.html:  
-	docker run -v "/$$(pwd)/final_report":/home/rstudio/final_project/final_report \
-	-e X=$(X) -e Y=$(Y) -e Z=$(Z) \ 
+	docker run -v --platform linux/amd64 \ # to make compatible with mac
+	"/$$(pwd)/final_report":/home/rstudio/final_project/final_report \
+	-e X=$(X) -e Y=$(Y) -e Z=$(Z) \
 	lhanson010/lh_final_project
 
 
