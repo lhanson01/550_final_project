@@ -9,15 +9,16 @@
 # $(<variable>) references a variable in make
 ########### REPORT GENERATION ##############
 X ?= 59
-Y ?= 78
-Z ?= 59
+Y ?= 40
+Z ?= 65
 ############ DOCKERHUB CODE ################
 # files that if changed, we would want to rebuild image 
 #PROJECTFILES = report.Rmd source/* Makefile
-#RENVFILES = renv.lock renv/active.R renv/settings.dcf
+#RENVFILES = renv.lock renv/active.R renv/settings.dcf	
 
 final_report/final_report.html:  
 	docker run -v "/$$(pwd)/final_report":/home/rstudio/final_project/final_report \
+	-e X=$(X) -e Y=$(Y) -e Z=$(Z) \ 
 	lhanson010/lh_final_project
 
 
